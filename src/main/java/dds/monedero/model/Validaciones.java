@@ -15,8 +15,8 @@ public class Validaciones {
         }
     }
     public static void validarMaximaCantidadDeDepositos(Cuenta cuenta){
-        if (cuenta.getMovimientos().stream().filter(movimiento -> movimiento.isDeposito()).count() >= 3) {
-            throw new MaximaCantidadDepositosException("Ya excedio los " + 3 + " depositos diarios");
+        if (cuenta.getMovimientos().stream().filter(movimiento -> movimiento.isDeposito()).count() >= MontosMaximos.getCantidadMaximaDepositos()) {
+            throw new MaximaCantidadDepositosException("Ya excedio los " + MontosMaximos.getCantidadMaximaDepositos() + " depositos diarios");
         }
     }
     public static void validarSaldoMenorAMonto(double monto, double saldo){
@@ -26,7 +26,7 @@ public class Validaciones {
     }
     public static void validarMaximaExtraccionDiaria(double monto, double limite){
         if (monto > limite) {
-            throw new MaximoExtraccionDiarioException("No puede extraer mas de $ " + 1000
+            throw new MaximoExtraccionDiarioException("No puede extraer mas de $ " + MontosMaximos.getLimiteBasico()
                     + " diarios, límite: " + limite);
         }
     }

@@ -18,7 +18,6 @@ public class Movimiento {
   public double getMonto() {
     return monto;
   }
-
   public LocalDate getFecha() {
     return fecha;
   }

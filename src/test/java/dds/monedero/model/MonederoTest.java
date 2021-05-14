@@ -65,4 +65,18 @@ public class MonederoTest {
     assertThrows(MontoNegativoException.class, () -> cuenta.sacar(-500));
   }
 
+  @Test
+  void TresExtraccionesFallidas() {
+    assertThrows(MaximoExtraccionDiarioException.class, () -> {
+      cuenta.setSaldo(19000);
+      cuenta.sacar(1200);
+      cuenta.sacar(700);
+      cuenta.poner(2000);
+    });
+  }
+  @Test
+  void extraccionFallidaPorFaltaDeFondos() {
+
+    assertThrows(SaldoMenorException.class, () -> cuenta.sacar(9000));
+  }
 }

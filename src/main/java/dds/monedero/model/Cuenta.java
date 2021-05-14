@@ -13,7 +13,8 @@ public class Cuenta {
 
   private double saldo = 0;
   private List<Movimiento> movimientos = new ArrayList<>();
-/* Code Smell 6 = Este contructor esta de mas ya que la variable esta inicializada en 0*/
+
+  /* Code Smell 6 = Este contructor esta de mas ya que la variable esta inicializada en 0*/
   public Cuenta() {
   }
 
@@ -24,34 +25,39 @@ public class Cuenta {
   public void setMovimientos(List<Movimiento> movimientos) {
     this.movimientos = movimientos;
   }
-/* Code Smell 3: podría usarse el metodo agregarMovimiento*/
+
+  /* Code Smell 3: podría usarse el metodo agregarMovimiento*/
   public void poner(double cuanto) {
     Validaciones.validarMontoNegativo(cuanto);
     Validaciones.validarMaximaCantidadDeDepositos(this);
-    Movimiento movimiento = new Movimiento(LocalDate.now(),cuanto,true);
+    Movimiento movimiento = new Movimiento(LocalDate.now(), cuanto, true);
     this.agregarMovimiento(movimiento);
   }
-/*Code Smell 3 */
+
+  /*Code Smell 3 */
   /*Code Smell  5: El limite puede calcularse en otro metodo*/
   public void sacar(double cuanto) {
     Validaciones.validarMontoNegativo(cuanto);
     Validaciones.validarSaldoMenorAMonto(cuanto, this.getSaldo());
-    Validaciones.validarMaximaExtraccionDiaria(cuanto,this.limite());
-    Movimiento movimiento = new Movimiento(LocalDate.now(),cuanto,false);
+    Validaciones.validarMaximaExtraccionDiaria(cuanto, this.limite());
+    Movimiento movimiento = new Movimiento(LocalDate.now(), cuanto, false);
     this.agregarMovimiento(movimiento);
   }
+
   /* Code smell 4: podría recibir un movimiento por parametro y no crear la instancia*/
   public void agregarMovimiento(Movimiento movimiento) {
     movimientos.add(movimiento);
   }
-  public double limite(){
-    return 1000- getMontoExtraidoA(LocalDate.now());
+
+  public double limite() {
+    return MontosMaximos.getLimiteBasico() - getMontoExtraidoA(LocalDate.now());
   }
+
   public double getMontoExtraidoA(LocalDate fecha) {
     return getMovimientos().stream()
-        .filter(movimiento -> !movimiento.isDeposito() && movimiento.getFecha().equals(fecha))
-        .mapToDouble(Movimiento::getMonto)
-        .sum();
+            .filter(movimiento -> !movimiento.isDeposito() && movimiento.getFecha().equals(fecha))
+            .mapToDouble(Movimiento::getMonto)
+            .sum();
   }
 
   public List<Movimiento> getMovimientos() {
@@ -64,6 +70,18 @@ public class Cuenta {
 
   public void setSaldo(double saldo) {
     this.saldo = saldo;
-  }
 
+
+  }
+}
+ class MontosMaximos{
+  private static double cantidadMaximaDepositos =3;
+  private static double limiteBasico =1000;
+
+  public static double getCantidadMaximaDepositos() {
+    return cantidadMaximaDepositos;
+  }
+  public static double getLimiteBasico() {
+    return limiteBasico;
+  }
 }

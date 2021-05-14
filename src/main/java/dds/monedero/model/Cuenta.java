@@ -13,9 +13,8 @@ public class Cuenta {
 
   private double saldo = 0;
   private List<Movimiento> movimientos = new ArrayList<>();
-
+/* Code Smell 6 = Este contructor esta de mas ya que la variable esta inicializada en 0*/
   public Cuenta() {
-    saldo = 0;
   }
 
   public Cuenta(double montoInicial) {
@@ -33,7 +32,7 @@ public class Cuenta {
     this.agregarMovimiento(movimiento);
   }
 /*Code Smell 3 */
-  /*Code Smell  4: El limite puede calcularse en otro metodo*/
+  /*Code Smell  5: El limite puede calcularse en otro metodo*/
   public void sacar(double cuanto) {
     Validaciones.validarMontoNegativo(cuanto);
     Validaciones.validarSaldoMenorAMonto(cuanto, this.getSaldo());

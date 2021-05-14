@@ -42,12 +42,13 @@ public class Movimiento {
   public boolean isExtraccion() {
     return !esDeposito;
   }
-
-  public void agregateA(Cuenta cuenta) {
+  /* Code Smell 2: Este método esta de más ya que nunca se utiliza y dentro de la clase Cuenta ya existe uno que
+  * hace lo mismo
+  *  public void agregateA(Cuenta cuenta) {
     cuenta.setSaldo(calcularValor(cuenta));
     cuenta.agregarMovimiento(fecha, monto, esDeposito);
-  }
-
+  }*/
+  
   public double calcularValor(Cuenta cuenta) {
     if (esDeposito) {
       return cuenta.getSaldo() + getMonto();

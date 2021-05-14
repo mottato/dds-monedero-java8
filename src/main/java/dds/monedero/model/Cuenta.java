@@ -29,7 +29,8 @@ public class Cuenta {
   public void poner(double cuanto) {
     Validaciones.validarMontoNegativo(cuanto);
     Validaciones.validarMaximaCantidadDeDepositos(this);
-    this.agregarMovimiento(LocalDate.now(),cuanto,true);
+    Movimiento movimiento = new Movimiento(LocalDate.now(),cuanto,true);
+    this.agregarMovimiento(movimiento);
   }
 /*Code Smell 3 */
   public void sacar(double cuanto) {
@@ -38,10 +39,11 @@ public class Cuenta {
     double montoExtraidoHoy = getMontoExtraidoA(LocalDate.now());
     double limite = 1000 - montoExtraidoHoy;
     Validaciones.validarMaximaExtraccionDiaria(cuanto,limite);
-    this.agregarMovimiento(LocalDate.now(),cuanto,false);
+    Movimiento movimiento = new Movimiento(LocalDate.now(),cuanto,false);
+    this.agregarMovimiento(movimiento);
   }
-  public void agregarMovimiento(LocalDate fecha, double cuanto, boolean esDeposito) {
-    Movimiento movimiento = new Movimiento(fecha, cuanto, esDeposito);
+  /* Code smell 4: podría recibir un movimiento por parametro y no crear la instancia*/
+  public void agregarMovimiento(Movimiento movimiento) {
     movimientos.add(movimiento);
   }
 

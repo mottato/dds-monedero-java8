@@ -33,12 +33,11 @@ public class Cuenta {
     this.agregarMovimiento(movimiento);
   }
 /*Code Smell 3 */
+  /*Code Smell  4: El limite puede calcularse en otro metodo*/
   public void sacar(double cuanto) {
     Validaciones.validarMontoNegativo(cuanto);
     Validaciones.validarSaldoMenorAMonto(cuanto, this.getSaldo());
-    double montoExtraidoHoy = getMontoExtraidoA(LocalDate.now());
-    double limite = 1000 - montoExtraidoHoy;
-    Validaciones.validarMaximaExtraccionDiaria(cuanto,limite);
+    Validaciones.validarMaximaExtraccionDiaria(cuanto,this.limite());
     Movimiento movimiento = new Movimiento(LocalDate.now(),cuanto,false);
     this.agregarMovimiento(movimiento);
   }
@@ -46,7 +45,9 @@ public class Cuenta {
   public void agregarMovimiento(Movimiento movimiento) {
     movimientos.add(movimiento);
   }
-
+  public double limite(){
+    return 1000- getMontoExtraidoA(LocalDate.now());
+  }
   public double getMontoExtraidoA(LocalDate fecha) {
     return getMovimientos().stream()
         .filter(movimiento -> !movimiento.isDeposito() && movimiento.getFecha().equals(fecha))
